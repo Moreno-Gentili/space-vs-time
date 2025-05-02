@@ -1,0 +1,18 @@
+{
+  "name": "space-vs-time-visualizer",
+  "private": true,
+  "version": "1.0.0",
+  "scripts": {
+    "dev": "rsbuild build && rsbuild dev",
+    "build": "rsbuild build",
+    "preview": "rsbuild preview",
+    "start": "rsbuild build && rsbuild preview"
+  },
+  "packageManager": "pnpm@9.5.0",
+  "dependencies": {
+    "@clockworklabs/spacetimedb-sdk": "1.1.0"
+  },
+  "devDependencies": {
+    "@rsbuild/core": "1.3.4"
+  }
+}

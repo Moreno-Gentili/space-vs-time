@@ -1,0 +1,37 @@
+services:
+  # SpaceTimeDB is running here
+  space-vs-time-server:
+    container_name: space-vs-time-server
+    image: space-vs-time-server:local
+    restart: "unless-stopped"
+    build:
+      context: ./server
+      dockerfile: Dockerfile
+    ports:
+      - 3000:3000
+
+  # Renders the game in a HTML page
+  space-vs-time-visualization:
+    depends_on:
+      - space-vs-time-server
+    container_name: space-vs-time-visualization
+    image: space-vs-time-visualization:local
+    restart: "unless-stopped"
+    build:
+      context: ./visualization
+      dockerfile: Dockerfile
+    ports:
+      - 3001:3001
+
+  # Simulates a bunch of clients: it joins the game and moves each character around
+  space-vs-time-simulation:
+    depends_on:
+      - space-vs-time-server
+    container_name: space-vs-time-simulation
+    image: space-vs-time-simulation:local
+    restart: "unless-stopped"
+    environment:
+      - LOG_PLAYER_ACTIVITY=0
+    build:
+      context: ./simulation
+      dockerfile: Dockerfile

@@ -1,0 +1,911 @@
+@font-face {
+    font-family: 'HesOnFire';
+    src: url(font/hes-on-fire.ttf);
+}
+
+@font-face {
+    font-family: 'PressStart2P';
+    src: url(font/PressStart2P-Regular.ttf);
+}
+
+:root {
+    --player-width: 11.8518vh;
+    --player-height: 14.07407vh;
+    --player-shadow-width: 9vh;
+    --player-shadow-height: 19vh;
+    --clock-width: 5.5vh;
+    --clock-height: 7.125vh;
+    --ball-size: 6.5vh;
+    --ball-shadow-width: 6.5vh;
+    --ball-shadow-height: 3.25vh;
+    --field-offset: 5.185vh;
+    --scale-factor: 7.407407;
+    --announcement-letter-delay: 0.03s;
+}
+
+* {
+    font-family: HesOnFire;
+    pointer-events: none;
+}
+
+html,
+body {
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+}
+
+body {
+    background-color: darkslategray;
+    display: flex;
+    justify-content: center;
+}
+
+main {
+    aspect-ratio: 16 / 9;
+    object-fit: contain;
+
+    background-image: url('images/field.png');
+    background-size: cover;
+    background-repeat: no-repeat;
+    image-rendering: pixelated;
+
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+#field {
+    width: 0;
+    height: 0;
+    position: relative;
+    margin-top: var(--field-offset);
+}
+
+.movable {
+    position: absolute;
+    width: 0;
+    height: 0;
+    left: calc(var(--scale-factor) * attr(data-x vh));
+    bottom: calc(var(--scale-factor) * attr(data-y vh));
+    /*transition: left 0.05s, bottom 0.05s;*/
+    /*z-index: calc(9999999 - (1000 * attr(data-y type(<number>))));*/
+}
+
+.ball::before {
+    content: '';
+    display: block;
+    position: absolute;
+    width: var(--ball-shadow-width);
+    height: var(--ball-shadow-height);
+    background-size: cover;
+    background-image: url('images/shadow.png');
+    background-repeat: no-repeat;
+    left: calc(var(--ball-shadow-width) * -0.5);
+    bottom: calc(var(--ball-shadow-height) * -0.3);
+    zoom: var(--zoom);
+}
+
+.ball::after {
+    position: absolute;
+    content: '';
+    transform-origin: center;
+    display: block;
+    width: var(--ball-size);
+    height: var(--ball-size);
+    background-size: cover;
+    background-image: url('images/ball.gif');
+    background-repeat: no-repeat;
+    left: calc(var(--ball-size) * -0.5);
+    bottom: calc(var(--scale-factor) * attr(data-z vh));
+}
+
+.space::before {
+    color: orange;
+}
+
+.time::before {
+    color: cornflowerblue;
+}
+
+.player {
+    animation-name: Appear;
+    animation-duration: 0.15s;
+    animation-fill-mode: forwards;
+    animation-iteration-count: 6;
+    opacity: 1.0;
+}
+
+.player::before {
+    content: attr(id);
+    display: block;
+    position: absolute;
+    width: var(--player-shadow-width);
+    height: var(--player-shadow-height);
+    background-size: contain;
+    background-image: url('images/shadow.png');
+    background-repeat: no-repeat;
+    background-position: bottom;
+    left: calc(var(--player-shadow-width) * -0.5);
+    bottom: calc(var(--player-shadow-height) * -0.08);
+    text-align: center;
+    font-size: 8vh;
+    letter-spacing: 0.2vh;
+    text-shadow: 0.4vh 0 0 #000, -0.4vh 0 0 #000, -0.4vh -0.4vh 0 #000, 0.4vh -0.4vh 0 #000, -0.4vh 0.4vh 0 #000, 0.4vh 0.4vh 0 #000;
+}
+
+.player::after {
+    position: absolute;
+    content: '';
+    transform-origin: center;
+    display: block;
+    width: var(--player-width);
+    height: var(--player-height);
+    background-repeat: no-repeat;
+    animation-duration: 0.4s;
+    animation-fill-mode: forwards;
+    animation-iteration-count: infinite;
+    animation-timing-function: step-start;
+    transition: transform 0.2s;
+    background-size: calc(var(--player-width) * 4) calc(var(--player-height) * 6);
+    left: calc(var(--player-width) * -0.5);
+    bottom: calc(var(--scale-factor) * attr(data-z vh));
+}
+
+.time::after {
+    transform: scaleX(-1);
+}
+
+.player#ASH::after {
+    background-image: url('images/sprite-sheet-ash.gif');
+}
+
+.player#TER::after {
+    background-image: url('images/sprite-sheet-ter.gif');
+}
+
+.player#ORI::after {
+    background-image: url('images/sprite-sheet-ori.gif');
+}
+
+.player#YUK::after {
+    background-image: url('images/sprite-sheet-yuk.gif');
+}
+
+.player#ROG::after {
+    background-image: url('images/sprite-sheet-rog.gif');
+}
+
+.player#REI::after {
+    background-image: url('images/sprite-sheet-rei.gif');
+}
+
+.player#DOC::after {
+    background-image: url('images/sprite-sheet-doc.gif');
+}
+
+.player#RAV::after {
+    background-image: url('images/sprite-sheet-rav.gif');
+}
+
+.player#LIZ::after {
+    background-image: url('images/sprite-sheet-liz.gif');
+}
+
+.player#FOX::after {
+    background-image: url('images/sprite-sheet-fox.gif');
+}
+
+.player#PRI::after {
+    background-image: url('images/sprite-sheet-pri.gif');
+}
+
+.player#LEO::after {
+    background-image: url('images/sprite-sheet-leo.gif');
+}
+
+.player#KES::after {
+    background-image: url('images/sprite-sheet-kes.gif');
+}
+
+.player#WAN::after {
+    background-image: url('images/sprite-sheet-wan.gif');
+}
+
+.player#UMA::after {
+    background-image: url('images/sprite-sheet-uma.gif');
+}
+
+.player#ONO::after {
+    background-image: url('images/sprite-sheet-ono.gif');
+}
+
+[data-state='Spawning'], [data-state='Despawning'] {
+    display: none;
+}
+
+.player[data-state='Standby']::after {
+    animation-name: Standby;
+}
+
+.player[data-state='ReadyToMove']::after {
+    animation-name: ReadyToMove;
+}
+
+.player[data-state='Moving']::after {
+    animation-name: Moving;
+}
+
+.player[data-state='ReadyToThrow']::after {
+    animation-name: HoldingBall;
+}
+
+.player[data-state='Throwing']::after {
+    animation-duration: 0.9s;
+    animation-name: Throwing;
+}
+
+.player[data-state='Hit']::after {
+    animation-name: Hit;
+}
+
+.player[data-state='WonGame']::after {
+    animation-name: WonGame;
+}
+
+.player[data-state='LostGame']::after {
+    animation-name: LostGame;
+}
+
+#announcement {
+    z-index: 999999;
+    font-size: 30vh;
+    position: absolute;
+    top: 40vh;
+    left: 0;
+    justify-content: center;
+    right: 0;
+    display: flex;
+    gap: 1.0vh;
+    transform: scaleX(1);
+}
+
+#announcement>span {
+    animation-name: FlipShine;
+    animation-duration: 2s;
+    animation-iteration-count: 1;
+    animation-fill-mode: forwards;
+    opacity: 0;
+    display: inline-block;
+    color: transparent;
+}
+
+#announcement.countdown>span {
+    animation-name: Flip;
+    animation-duration: 0.9s;
+}
+
+#announcement.tied>span {
+    animation-name: Flip;
+    animation-duration: 1.5s;
+}
+
+#announcement.spacewins>span::after {
+    background-image: url('./images/announcement-space-background.gif');
+}
+
+#announcement.timewins>span::after {
+    background-image: url('./images/announcement-time-background.gif');
+}
+
+#announcement.tied>span::after {
+    background-image: url('./images/announcement-tied-background.gif');
+}
+
+#announcement>span:before {
+    content: attr(data-text);
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 999998;
+    color: #FFF;
+    text-shadow: 0 -2.0vh 0 #000, 0 2.0vh 0 #000, 2.0vh 0 0 #000, -2.0vh 0 0 #000, -2.0vh -2.0vh 0 #000, 2.0vh -2.0vh 0 #000, -2.0vh 2.0vh 0 #000, 2.0vh 2.0vh 0 #000;
+}
+
+#announcement>span:after {
+    content: attr(data-text);
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-clip: text;
+    z-index: 999999;
+	color: transparent;
+	background-image: url('./images/announcement-general-background.gif');
+    background-size: cover;
+    text-shadow: 2px 2px 2px white inset;
+}
+
+#announcement>span:nth-child(1) { animation-delay: 0; }
+#announcement>span:nth-child(2) { animation-delay: calc(var(--announcement-letter-delay) * 1); }
+#announcement>span:nth-child(3) { animation-delay: calc(var(--announcement-letter-delay) * 2); }
+#announcement>span:nth-child(4) { animation-delay: calc(var(--announcement-letter-delay) * 3); }
+#announcement>span:nth-child(5) { animation-delay: calc(var(--announcement-letter-delay) * 4); }
+#announcement>span:nth-child(6) { animation-delay: calc(var(--announcement-letter-delay) * 5); }
+#announcement>span:nth-child(7) { animation-delay: calc(var(--announcement-letter-delay) * 6); }
+#announcement>span:nth-child(8) { animation-delay: calc(var(--announcement-letter-delay) * 7); }
+#announcement>span:nth-child(9) { animation-delay: calc(var(--announcement-letter-delay) * 8); }
+#announcement>span:nth-child(10) { animation-delay: calc(var(--announcement-letter-delay) * 9); }
+#announcement>span:nth-child(11) { animation-delay: calc(var(--announcement-letter-delay) * 10); }
+#announcement>span:nth-child(12) { animation-delay: calc(var(--announcement-letter-delay) * 11); }
+
+.digits {
+    position: absolute;
+    z-index: 1;
+    width: 0;
+    height: 0;
+    top: 0.8vh;
+}
+
+#space-score {
+    left: 29.2vh;
+}
+
+#time-score {
+    right: 29.5vh;
+}
+
+.digits::before, .digits::after {
+    content: '';
+    width: var(--clock-width);
+    height: var(--clock-height);
+    background-repeat: no-repeat;
+    background-position: top left;
+    background-size: calc(var(--clock-width) * 3) calc(var(--clock-height) * 4);
+    display: inline-block;
+    position: absolute;
+}
+
+#clock {
+    top: 0.8vh;
+}
+
+#clock::before, #clock::after {
+    background-image: url(./images/sprite-sheet-score.gif);
+}
+
+#space-score::before, #space-score::after, #time-score::before, #time-score::after {
+    background-image: url(./images/sprite-sheet-clock.gif);
+}
+
+.digits::before {
+    left: calc(-1.05 * var(--clock-width));
+}
+
+.digits::after {
+    left: calc(0.15 * var(--clock-width));
+}
+
+.digits[data-tenths="1"]::before, .digits[data-ones="1"]::after {
+    background-position: left 0 top 0;
+}
+
+.digits[data-tenths="2"]::before, .digits[data-ones="2"]::after {
+    background-position: left calc(var(--clock-width) * -1) top 0;
+}
+
+.digits[data-tenths="3"]::before, .digits[data-ones="3"]::after {
+    background-position: left calc(var(--clock-width) * -2) top 0;
+}
+
+.digits[data-tenths="4"]::before, .digits[data-ones="4"]::after {
+    background-position: left 0 top calc(var(--clock-height) * -1);
+}
+
+.digits[data-tenths="5"]::before, .digits[data-ones="5"]::after {
+    background-position: left calc(var(--clock-width) * -1) top calc(var(--clock-height) * -1);
+}
+
+.digits[data-tenths="6"]::before, .digits[data-ones="6"]::after {
+    background-position: left calc(var(--clock-width) * -2) top calc(var(--clock-height) * -1);
+}
+
+.digits[data-tenths="7"]::before, .digits[data-ones="7"]::after {
+    background-position: left 0 top calc(var(--clock-height) * -2);
+}
+
+.digits[data-tenths="8"]::before, .digits[data-ones="8"]::after {
+    background-position: left calc(var(--clock-width) * -1) top calc(var(--clock-height) * -2);
+}
+
+.digits[data-tenths="9"]::before, .digits[data-ones="9"]::after {
+    background-position: left calc(var(--clock-width) * -2) top calc(var(--clock-height) * -2);
+}
+
+.digits[data-tenths="0"]::before, .digits[data-ones="0"]::after {
+    background-position: left 0 top calc(var(--clock-height) * -3);
+}
+
+.digits[data-tenths="-"]::before, .digits[data-ones="-"]::after {
+    background-position: left calc(var(--clock-width) * -1) top calc(var(--clock-height) * -3);
+}
+
+.digits[data-tenths=""]::before, .digits[data-ones=""]::after {
+    background-position: left calc(var(--clock-width) * -2) top calc(var(--clock-height) * -3);
+}
+
+@keyframes FlipShine {
+    0% {
+        transform: scaleX(0);
+        opacity: 0;
+    }
+
+    0.01% {
+        opacity: 1;
+    }
+
+    20% {
+        transform: scaleX(1);
+        opacity: 1;
+    }
+
+    25% {
+        filter: brightness(1.0);
+        transform: scaleX(1);
+        opacity: 1;
+    }
+
+    35% {
+        filter: brightness(3.0);
+        transform: scaleX(1);
+        opacity: 1;
+    }
+
+    45% {
+        filter: brightness(1.0);
+        transform: scaleX(1);
+        opacity: 1;
+    }
+
+    90% {
+        transform: scaleX(1);
+        opacity: 1;
+    }
+
+    100% {
+        transform: scaleX(1);
+        opacity: 0;
+    }
+}
+
+@keyframes Appear {
+    0% {
+        opacity: 0.5;
+    }
+
+    50% {
+        opacity: 0.5;
+    }
+
+    50.1% {
+        opacity: 1.0;
+    }
+
+    100% {
+        opacity: 1.0;
+    }
+}
+
+@keyframes Flip {
+    0% {
+        transform: scaleX(0);
+        opacity: 0;
+    }
+
+    0.01% {
+        opacity: 1;
+    }
+
+    20% {
+        transform: scaleX(1);
+        opacity: 1;
+    }
+
+    80% {
+        transform: scaleX(1);
+        opacity: 1;
+    }
+
+    99.9% {
+        transform: scaleX(0);
+        opacity: 1;
+    }
+
+    100% {
+        opacity: 0;
+    }
+}
+
+@keyframes ReadyToMove {
+    25% {
+        background-position: left 0 top 0;
+    }
+
+    50% {
+        background-position: left calc(var(--player-width) * -1) top 0;
+    }
+
+    75% {
+        background-position: left calc(var(--player-width) * -2) top 0;
+    }
+
+    100% {
+        background-position: left calc(var(--player-width) * -3) top 0;
+    }
+}
+
+@keyframes Standby {
+    100% {
+        background-position: left 0 top 0;
+    }
+}
+
+@keyframes Moving {
+    25% {
+        background-position: left 0 top calc(var(--player-height) * -1);
+    }
+
+    50% {
+        background-position: left calc(var(--player-width) * -1) top calc(var(--player-height) * -1);
+    }
+
+    75% {
+        background-position: left calc(var(--player-width) * -2) top calc(var(--player-height) * -1);
+    }
+
+    100% {
+        background-position: left calc(var(--player-width) * -3) top calc(var(--player-height) * -1);
+    }
+}
+
+@keyframes Throwing {
+    25% {
+        background-position: left 0 top calc(var(--player-height) * -3);
+    }
+
+    70% {
+        background-position: left calc(var(--player-width) * -1) top calc(var(--player-height) * -3);
+    }
+
+    85% {
+        background-position: left calc(var(--player-width) * -2) top calc(var(--player-height) * -3);
+    }
+
+    100% {
+        background-position: left calc(var(--player-width) * -3) top calc(var(--player-height) * -3);
+    }
+}
+
+@keyframes HoldingBall {
+    100% {
+        background-position: left calc(var(--player-width) * -2) top calc(var(--player-height) * -3);
+    }
+}
+
+@keyframes Hit {
+    25% {
+        background-position: left 0 top calc(var(--player-height) * -4);
+    }
+
+    50% {
+        background-position: left calc(var(--player-width) * -1) top calc(var(--player-height) * -4);
+    }
+
+    75% {
+        background-position: left calc(var(--player-width) * -2) top calc(var(--player-height) * -4);
+    }
+
+    100% {
+        background-position: left calc(var(--player-width) * -3) top calc(var(--player-height) * -4);
+    }
+}
+
+@keyframes WonGame {
+    25% {
+        background-position: left 0 top calc(var(--player-height) * -2);
+    }
+
+    50% {
+        background-position: left calc(var(--player-width) * -1) top calc(var(--player-height) * -2);
+    }
+
+    75% {
+        background-position: left calc(var(--player-width) * -2) top calc(var(--player-height) * -2);
+    }
+
+    100% {
+        background-position: left calc(var(--player-width) * -3) top calc(var(--player-height) * -2);
+    }
+}
+
+@keyframes LostGame {
+    100% {
+        background-position: left 0 top calc(var(--player-height) * -5);
+    }
+}
+
+.bubble:empty {
+    transform: scale(0);
+}
+
+.bubble {
+    transition: transform 0.4s;
+    transform: scale(1.0);
+    position: absolute;
+    display: inline-block;
+    font-family: PressStart2P;
+    text-align: center;
+    font-size: 2.2vh;
+    word-spacing: 90%;
+    line-height: 100%;
+    text-transform: uppercase;
+    background-color: #fff;
+    color: #000;
+    box-shadow: 0 -4px #fff, 0 -8px #000, 4px 0 #fff, 4px -4px #000, 8px 0 #000, 0 4px #fff, 0 8px #000, -4px 0 #fff, -4px 4px #000, -8px 0 #000, -4px -4px #000, 4px 4px #000;
+    box-sizing: border-box;
+    max-width: 25vh;
+    padding: 0.3vh;
+    padding-top: 0.5vh;
+    top: calc(var(--player-height) * -0.9);
+    font-family: PressStart2P;
+    z-index: 9999999;
+}
+
+.bubble.mvp {
+    font-size: 6vh !important;
+    padding: 0.7vh;
+    padding-top: 1.5vh;
+    padding-left: 1.5vh;
+    z-index: 999999;
+    animation-name: Rainbow;
+    animation-duration: 0.1s;
+    animation-iteration-count: infinite;
+}
+
+.space>.bubble {
+    left: calc(var(--player-width) * 0.5);
+}
+
+.time>.bubble {
+    right: calc(var(--player-width) * 0.5);
+}
+
+.bubble::after {
+    content: "";
+    display: block;
+    position: absolute;
+    box-sizing: border-box;
+}
+
+.bubble.shadow {
+    box-shadow: 0 -4px #fff, 0 -8px #000, 4px 0 #fff, 4px -4px #000, 8px 0 #000, 0 4px #fff, 0 8px #000, -4px 0 #fff, -4px 4px #000, -8px 0 #000, -4px -4px #000, 4px 4px #000, 4px 12px rgba(0, 0, 0, 0.1), 12px 4px rgba(0, 0, 0, 0.1), 8px 8px rgba(0, 0, 0, 0.1);
+}
+
+
+.time>.bubble::after {
+    height: 4px;
+    width: 4px;
+    top: 20px;
+    right: -8px;
+    background: white;
+    box-shadow: 4px -4px #fff, 4px 0 #fff, 8px 0 #fff, 0 -8px #fff, 4px 4px #000, 8px 4px #000, 12px 4px #000, 16px 4px #000, 12px 0 #000, 8px -4px #000, 4px -8px #000, 0 -4px #fff;
+}
+
+.space>.bubble::after {
+    height: 4px;
+    width: 4px;
+    top: 20px;
+    left: -8px;
+    background: white;
+    box-shadow: -4px -4px #fff, -4px 0 #fff, -8px 0 #fff, 0 -8px #fff, -4px 4px #000, -8px 4px #000, -12px 4px #000, -16px 4px #000, -12px 0 #000, -8px -4px #000, -4px -8px #000, 0 -4px #fff;
+}
+
+#intro {
+    z-index: 999999;
+    width: 100vw;
+    left: 0;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    text-align: center;
+    position: fixed;
+}
+
+#intro.hidden {
+    animation-name: Disappear;
+    animation-duration: 1s;
+    animation-fill-mode: forwards;
+}
+
+#intro:not(.hidden)+#field {
+    display: none;
+}
+
+#intro.hidden+#field {
+    animation-name: Appear;
+    animation-duration: 1.5;
+    animation-fill-mode: forwards;
+}
+
+#intro>div::before {
+    content: attr(data-text);
+}
+
+#intro>div[data-text] {
+    font-size: 35vh;
+    text-align: center;
+    width: 100vw;
+}
+
+#intro>div[data-text]::before {
+    color: #FFF;
+    position: absolute;
+    left: 0;
+    right: 0;
+    text-shadow: 0 -2.0vh 0 #000, 0 2.0vh 0 #000, 2.0vh 0 0 #000, -2.0vh 0 0 #000, -2.0vh -2.0vh 0 #000, 2.0vh -2.0vh 0 #000, -2.0vh 2.0vh 0 #000, 2.0vh 2.0vh 0 #000;
+}
+
+#intro>div[data-text]::after {
+    position: absolute;
+    left: 0;
+    right: 0;
+    text-align: center;
+    content: attr(data-text);
+    background-clip: text;
+    z-index: 10000001;
+	color: transparent;
+    background-size: contain;
+    background-repeat: repeat-x;
+    height: auto;
+}
+
+#intro>div[data-text='SPACE'] {
+    margin-top: 15vh;
+}
+
+#intro>div[data-text='SPACE']::after {
+    background-image: url('./images/announcement-space-background.gif');
+}
+
+#intro>div[data-text='TIME']::after {
+    background-image: url('./images/announcement-time-background.gif');
+}
+
+#intro>div[data-text='VS']::before, #intro>div[data-text='VS']::after {
+    font-size: 24vh;
+}
+
+#intro>div[data-text='VS']::after {
+    background-image: url('./images/announcement-general-background.gif');
+}
+
+#intro>div[data-text='VS'] {
+    margin-top: 39vh;
+}
+
+#intro>div[data-text='TIME'] {
+    margin-top: 55.7vh;
+}
+
+#intro>div[data-text='INSERT COIN'] {
+    margin-top: 84vh;
+    animation-name: Blink;
+    animation-duration: 1.2s;
+    animation-iteration-count: infinite;
+}
+
+#intro.hidden>div[data-text='INSERT COIN'] {
+    animation-duration: 0.1s;
+}
+
+@keyframes Blink {
+    0% {
+        opacity: 0;
+    }
+    50% {
+        opacity: 0;
+    }
+    50.1% {
+        opacity: 1;
+    }
+
+    100% {
+        opacity: 1;
+    }
+}
+
+@keyframes Disappear {
+    0% {
+        opacity: 1.0;
+    }
+
+    89.9% {
+        opacity: 1.0;
+    }
+
+    99.9% {
+        opacity: 0.0;
+    }
+
+    100% {
+        opacity: 0.0;
+        display: none;
+    }
+}
+
+@keyframes Appear {
+    0% {
+        display: none;
+    }
+
+    99.9% {
+        display: none;
+    }
+
+    100% {
+        display: block;
+    }
+}
+
+@keyframes Rainbow {
+    0% {
+        color: #ff0000;
+    }
+
+    15% {
+        color: #0012ff;
+    }
+    
+    30% {
+        color: #90ff00;
+    }
+    
+    45% {
+        color: #f000ff;
+    }
+    
+    60% {
+        color: #ffc000;
+    }
+    
+    75% {
+        color: #7e00ff;
+    }
+    
+    90% {
+        color: #00f0ff;
+    }
+
+    100% {
+        color: #ff0000;
+    }
+    
+}
+
+#intro>div[data-text='INSERT COIN']::before, #intro>div[data-text='INSERT COIN']::after {
+    font-size: 8vh;
+}
+
+#intro>div[data-text='VS']::before {
+    text-shadow: 0 -1.7vh 0 #000, 0 1.7vh 0 #000, 1.7vh 0 0 #000, -1.7vh 0 0 #000, -1.7vh -1.7vh 0 #000, 1.7vh -1.7vh 0 #000, -1.7vh 1.7vh 0 #000, 1.7vh 1.7vh 0 #000;
+}
+
+#intro>div[data-text='INSERT COIN']::before {
+    text-shadow: 0 -0.7vh 0 #000, 0 0.7vh 0 #000, 0.7vh 0 0 #000, -0.7vh 0 0 #000, -0.7vh -0.7vh 0 #000, 0.7vh -0.7vh 0 #000, -0.7vh 0.7vh 0 #000, 0.7vh 0.7vh 0 #000;
+}

@@ -1,0 +1,24 @@
+Custom Hobby License
+Copyright (c) Moreno Gentili 2025
+
+Permission is hereby granted, free of charge, to use, copy, modify, and distribute substantial portions of this software, including in commercial projects, under the following conditions:
+
+1. **Attribution**:  
+   Any use of this code, in part or in whole, must provide clear and visible attribution to the original author: Moreno Gentili.  
+   - For software products, this can be in the "About" section, documentation, or credits.
+   - For libraries or tools, attribution must be present in documentation or README files.
+   - Commercial use without attribution is prohibited.
+
+2. **No Redistribution of Full Application**:  
+   You may not redistribute the full application (or any substantially similar derivative) as a standalone product, whether free or paid, on app stores or other distribution platforms without prior written permission from the copyright holder.
+
+3. **Partial Reuse Permitted**:  
+   You may extract and reuse portions of this codebase (e.g., functions, modules, utilities) in other projects, including commercial ones, provided attribution is given and the project is not substantially similar to the original.
+
+4. **No Warranty**:  
+   This software is provided "as is", without warranty of any kind, express or implied, including but not limited to the warranties of merchantability, fitness for a particular purpose, and noninfringement.
+
+5. **Graphical Assets Restriction**:  
+   All graphical assets (including sprites, fonts, textures, icons, and visual designs) contained in this repository are **not licensed for reuse or redistribution**, in whole or in part, under any circumstance, unless you receive explicit written permission from the copyright holder.
+
+For questions or licensing requests beyond these terms, please contact Moreno Gentili.
