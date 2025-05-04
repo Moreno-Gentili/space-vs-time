@@ -112,7 +112,7 @@ main {
 }
 
 .player {
-    animation-name: Appear;
+    animation-name: Spawn;
     animation-duration: 0.15s;
     animation-fill-mode: forwards;
     animation-iteration-count: 6;
@@ -484,7 +484,7 @@ main {
     }
 }
 
-@keyframes Appear {
+@keyframes Spawn {
     0% {
         opacity: 0.5;
     }
